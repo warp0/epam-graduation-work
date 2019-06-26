@@ -12,7 +12,7 @@ resource "aws_vpc" "main" {
   }
 } 
 resource "aws_key_pair" "deployer" {
-  key_name   = "${key_pair}"
+  key_name   = "${var.key_pair}"
   public_key = "${file("public.pem")}"
 }
 
@@ -163,7 +163,7 @@ resource "aws_instance" "devtools" {
   ami                = "${data.aws_ami.ubuntu.id}"
   instance_type      = "t2.micro"
   key_name           = "${var.key_name}"
-  subnet_id          = "${aws_subnet.main_nat.id}"
+  subnet_id          = "${aws_subnet.main_bridge.id}"
   vpc_security_group_ids = ["${aws_security_group.noport.id}"]
 
   tags = {
@@ -176,7 +176,7 @@ resource "aws_instance" "devtools" {
 resource "aws_instance" "bastion" {
   ami                = "${data.aws_ami.ubuntu.id}"
   instance_type      = "t2.micro"
-  key_name           = "${var.key_name}"
+  key_name           = "${var.key_pair}"
   subnet_id          = "${aws_subnet.main_bridge.id}"
   vpc_security_group_ids = ["${aws_security_group.ssh.id}"]
 
