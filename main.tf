@@ -7,14 +7,14 @@ provider "aws" {
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
 
-  provisioner "local-exec" {
-    command = "openssl genrsa -out key.pem 2048 && openssl rsa -in key.pem -outform PEM -pubout -out public.pem"
-  }
+#  provisioner "local-exec" {
+#    command = "openssl genrsa -out key.pem 2048 && openssl rsa -in key.pem -outform PEM -pubout -out public.pem"
+#  }
 } 
-resource "aws_key_pair" "deployer" {
-  key_name   = "${var.key_pair}"
-  public_key = "${file("public.pem")}"
-}
+#resource "aws_key_pair" "deployer" {
+#  key_name   = "${var.key_pair}"
+#  public_key = "${file("public.pem")}"
+#}
 
 #set subnets for bridged 
 resource "aws_subnet" "main_bridge" {
@@ -162,7 +162,7 @@ data "aws_ami" "ubuntu" {
 resource "aws_instance" "devtools" {
   ami                = "${data.aws_ami.ubuntu.id}"
   instance_type      = "t2.micro"
-  key_name           = "${var.key_name}"
+  key_name           = "${var.key_pair}"
   subnet_id          = "${aws_subnet.main_bridge.id}"
   vpc_security_group_ids = ["${aws_security_group.noport.id}"]
 
@@ -183,15 +183,15 @@ resource "aws_instance" "bastion" {
   tags = {
     Name = "Bastion instance"
   }
-  provisioner "file" {
-    source      = "ansible_install.sh"
-    destination = "/var/users/ubuntu"
-
-    connection {
-      type     = "ssh"
-      user     = "ubuntu"
-      private_key = "${file("privkey.ppk")}"
-    }
-  }
+#  provisioner "file" {
+#    source      = "ansible_install.sh"
+#    destination = "/var/users/ubuntu"
+#
+#    connection {
+#      type     = "ssh"
+#      user     = "ubuntu"
+#      private_key = "${file("privkey.ppk")}"
+#    }
+#  }
 }
 
