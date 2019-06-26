@@ -1,4 +1,4 @@
-#choose ami image for instance
+
 
 data "aws_ami" "ubuntu" {
   most_recent = true
