@@ -3,13 +3,13 @@ provider "aws" {
 }
 
 module "init" {
-  source = "init.tf"
+  source = "./"
 }
 
 module "vpc_firewall" {
-  source = "vpc_firewall.tf"
+  source = "./"
 }
 
 module "devtools_bastion" {
-  source = "devtools_bastion.tf"
+  source = "./"
 }
