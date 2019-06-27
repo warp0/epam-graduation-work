@@ -16,6 +16,7 @@ resource "aws_key_pair" "deployer" {
 resource "aws_subnet" "main_bridge" {
   vpc_id     = "${aws_vpc.main.id}"
   cidr_block = "10.0.2.0/24"
+  map_public_ip_on_launch = true
 }
 
 #create gateways for vpc
@@ -43,7 +44,7 @@ resource "aws_route_table_association" "public" {
 
 #allow any inbound and outbound traffic but not expose any port
 resource "aws_security_group" "noport" {
-  name  = "allow_all"
+  name  = "noport"
   vpc_id = "${aws_vpc.main.id}"
 
   ingress {
@@ -161,6 +162,7 @@ resource "aws_instance" "devtools" {
   key_name           = "${var.key_pair}"
   subnet_id          = "${aws_subnet.main_bridge.id}"
   vpc_security_group_ids = ["${aws_security_group.noport.id}"]
+  associate_public_ip_address = true
 
   tags = {
     Name = "DevTools instance"
@@ -175,6 +177,7 @@ resource "aws_instance" "bastion" {
   key_name           = "${var.key_pair}"
   subnet_id          = "${aws_subnet.main_bridge.id}"
   vpc_security_group_ids = ["${aws_security_group.ssh.id}"]
+  associate_public_ip_address = true
 
   tags = {
     Name = "Bastion instance"
