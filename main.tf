@@ -190,37 +190,27 @@ resource "aws_instance" "bastion" {
 }
 
 #Installing ansible on bastion
-provisioner "remote-exec" {
-  
-  connection {
-    host     = "${aws_instance.bastion.public_ip}"
-    type     = "ssh"
-    user     = "ubuntu"
-    private_key = "${file("key.pem")}"
-  }
+  provisioner "remote-exec" {
+    
+    connection {
+      host     = "${aws_instance.bastion.public_ip}"
+      type     = "ssh"
+      user     = "ubuntu"
+      private_key = "${file("key.pem")}"
+    }
 
-  inline = [
-            "cd",
-            "sudo apt install python -y",
-            "sudo wget https://bootstrap.pypa.io/get-pip.py",
-            "sudo chmod +x get-pip.py",
-            "sudo python get-pip.py",
-            "sudo rm get-pip.py",
-            "sudo pip install ansible",
-            ]
-}
+    inline = [
+              "cd",
+              "sudo apt install python -y",
+              "sudo wget https://bootstrap.pypa.io/get-pip.py",
+              "sudo chmod +x get-pip.py",
+              "sudo python get-pip.py",
+              "sudo rm get-pip.py",
+              "sudo pip install ansible",
+              ]
+  }
   
   }
-#  provisioner "file" {
-#    source      = "ansible_install.sh"
-#    destination = "/var/users/ubuntu"
-#
-#    connection {
-#      type     = "ssh"
-#      user     = "ubuntu"
-#      private_key = "${file("privkey.ppk")}"
-#    }
-#  }
 }
 
 
