@@ -92,7 +92,7 @@ resource "aws_security_group" "webserv" {
   ingress {
     from_port       = 80
     to_port         = 80
-    protocol        = "-1"
+    protocol        = "6"
     cidr_blocks     = ["0.0.0.0/0"] 
   }
   egress {
@@ -126,7 +126,7 @@ resource "aws_security_group" "ssh" {
   ingress {
     from_port       = 22
     to_port         = 22
-    protocol        = "-1"
+    protocol        = "6"
     cidr_blocks     = ["0.0.0.0/0"] 
   }
   egress {

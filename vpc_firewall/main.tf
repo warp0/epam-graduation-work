@@ -1,13 +1,7 @@
-# Starting VPC
-
-resource "aws_vpc" "main" {
-  cidr_block = "10.0.0.0/16"
-}
-
-#set subnets for bridged 
 resource "aws_subnet" "main_bridge" {
   vpc_id     = "${aws_vpc.main.id}"
   cidr_block = "10.0.2.0/24"
+  map_public_ip_on_launch = true
 }
 
 #create gateways for vpc
@@ -35,7 +29,7 @@ resource "aws_route_table_association" "public" {
 
 #allow any inbound and outbound traffic but not expose any port
 resource "aws_security_group" "noport" {
-  name  = "allow_all"
+  name  = "noport"
   vpc_id = "${aws_vpc.main.id}"
 
   ingress {
@@ -83,7 +77,7 @@ resource "aws_security_group" "webserv" {
   ingress {
     from_port       = 80
     to_port         = 80
-    protocol        = "-1"
+    protocol        = "6"
     cidr_blocks     = ["0.0.0.0/0"] 
   }
   egress {
@@ -97,7 +91,7 @@ resource "aws_security_group" "webserv" {
 #expose only SSH
 resource "aws_security_group" "ssh" {
   
-  name  = "webserv"
+  name  = "ssh"
 
   vpc_id = "${aws_vpc.main.id}"
   ingress {
@@ -117,7 +111,7 @@ resource "aws_security_group" "ssh" {
   ingress {
     from_port       = 22
     to_port         = 22
-    protocol        = "-1"
+    protocol        = "6"
     cidr_blocks     = ["0.0.0.0/0"] 
   }
   egress {
