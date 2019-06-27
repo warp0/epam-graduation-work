@@ -1,5 +1,7 @@
 #! /bin/bash
 
+#start deploy
+terraform apply -auto-approve
 
 #remove old key and generate new one
 sudo rm -f key.pem public.pem public_header.pem 
