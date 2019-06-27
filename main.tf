@@ -217,7 +217,7 @@ resource "aws_instance" "bastion" {
               "echo '${file("./ansible/playbook.yml")}' > playbook.yml",
               "sudo mkdir /etc/ansible",
               "sudo wget -O /etc/ansible/ansible.cfg https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg",
-              "sed -i 's/#host_key_checking = False/host_key_checking = False/g' /etc/ansible/ansible.cfg",
+              "sudo sed -i 's/#host_key_checking = False/host_key_checking = False/g' /etc/ansible/ansible.cfg",
               "sudo ansible-playbook -i hosts -u ubuntu playbook.yml"
               ]
   }
