@@ -181,13 +181,15 @@ resource "aws_instance" "bastion" {
 
   tags = {
     Name = "Bastion instance"
+  }
+  
+  #preparing inventory
   provisioner "local-exec" {
-
-  comand = "echo ${aws_instance.devtools.private_ip} >> hosts"
+  command = "echo ${aws_instance.devtools.private_ip} >> hosts"
   #comand = "echo ${aws_instance.ci.private_ip} >> hosts"
   #comand = "echo ${aws_instance.qa.private_ip} >> hosts"
   #comand = "echo ${aws_instance.docker.private_ip} >> hosts"
-}
+  }
 
 #Installing ansible on bastion
   provisioner "remote-exec" {
@@ -209,13 +211,6 @@ resource "aws_instance" "bastion" {
               "sudo pip install ansible",
               ]
   }
-  
-  }
 }
-
-
-#preparing inventory
-
-
 
 #providing identity key to manage infrastucture
