@@ -185,7 +185,7 @@ resource "aws_instance" "bastion" {
   
   #preparing inventory
   provisioner "local-exec" {
-  command = "echo ${aws_instance.devtools.private_ip} >> hosts"
+  command = "echo '${aws_instance.devtools.private_ip} ansible_ssh_private_key_file=./key.pem' > ./ansible/hosts"
   #comand = "echo ${aws_instance.ci.private_ip} >> hosts"
   #comand = "echo ${aws_instance.qa.private_ip} >> hosts"
   #comand = "echo ${aws_instance.docker.private_ip} >> hosts"
@@ -209,6 +209,11 @@ resource "aws_instance" "bastion" {
               "sudo python get-pip.py",
               "sudo rm get-pip.py",
               "sudo pip install ansible",
+              "mkdir ansible",
+              "cd ansible",
+              "echo ${file("key.pem")} > key.pem",
+              "echo ${file("./ansible/playbook.yml")} > playbook.yml",
+              "sudo ansible-playbook -i hosts playbook.yml"
               ]
   }
 }
