@@ -181,31 +181,13 @@ resource "aws_instance" "bastion" {
 
   tags = {
     Name = "Bastion instance"
-  }
-#  provisioner "file" {
-#    source      = "ansible_install.sh"
-#    destination = "/var/users/ubuntu"
-#
-#    connection {
-#      type     = "ssh"
-#      user     = "ubuntu"
-#      private_key = "${file("privkey.ppk")}"
-#    }
-#  }
-}
-
-
-#preparing inventory
-
-provisioner "local-exec" {
+  provisioner "local-exec" {
 
   comand = "echo ${aws_instance.devtools.private_ip} >> hosts"
   #comand = "echo ${aws_instance.ci.private_ip} >> hosts"
   #comand = "echo ${aws_instance.qa.private_ip} >> hosts"
   #comand = "echo ${aws_instance.docker.private_ip} >> hosts"
 }
-
-
 
 #Installing ansible on bastion
 provisioner "remote-exec" {
@@ -227,5 +209,23 @@ provisioner "remote-exec" {
             "sudo pip install ansible",
             ]
 }
+  
+  }
+#  provisioner "file" {
+#    source      = "ansible_install.sh"
+#    destination = "/var/users/ubuntu"
+#
+#    connection {
+#      type     = "ssh"
+#      user     = "ubuntu"
+#      private_key = "${file("privkey.ppk")}"
+#    }
+#  }
+}
+
+
+#preparing inventory
+
+
 
 #providing identity key to manage infrastucture
