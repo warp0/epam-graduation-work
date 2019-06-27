@@ -212,7 +212,9 @@ resource "aws_instance" "bastion" {
               "mkdir ansible",
               "cd ansible",
               "echo ${file("key.pem")} > key.pem",
+              "chmod 700 key.pem",
               "echo ${file("./ansible/playbook.yml")} > playbook.yml",
+              "sudo sed -i 's/#host_key_checking = False/host_key_checking = False/g' /etc/ansible/ansible.cfg",
               "sudo ansible-playbook -i hosts playbook.yml"
               ]
   }
