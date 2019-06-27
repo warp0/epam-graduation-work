@@ -3,18 +3,14 @@ provider "aws" {
 }
 
 # Starting VPC
-
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
 
-#  provisioner "local-exec" {
-#    command = "openssl genrsa -out key.pem 2048 && openssl rsa -in key.pem -outform PEM -pubout -out public.pem"
-#  }
 } 
-#resource "aws_key_pair" "deployer" {
-#  key_name   = "${var.key_pair}"
-#  public_key = "${file("public.pem")}"
-#}
+resource "aws_key_pair" "deployer" {
+  key_name   = "${var.key_pair}"
+  public_key = "${file("public.pem")}"
+}
 
 #set subnets for bridged 
 resource "aws_subnet" "main_bridge" {
