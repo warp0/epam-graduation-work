@@ -9,7 +9,7 @@ resource "aws_vpc" "main" {
 } 
 resource "aws_key_pair" "deployer" {
   key_name   = "${var.key_pair}"
-  public_key = "${file("public.pem")}"
+  public_key = "${file("~/project1/terraform/public.pem")}"
 }
 
 #set subnets for bridged 
@@ -105,7 +105,7 @@ resource "aws_security_group" "webserv" {
 #expose only SSH
 resource "aws_security_group" "ssh" {
   
-  name  = "webserv"
+  name  = "ssh"
 
   vpc_id = "${aws_vpc.main.id}"
   ingress {
