@@ -9,7 +9,7 @@ resource "aws_vpc" "main" {
 } 
 resource "aws_key_pair" "deployer" {
   key_name   = "${var.key_pair}"
-  public_key = "${file("~/project1/terraform/public.pem")}"
+  public_key = "${file("./public.pem")}"
 }
 
 #set subnets for bridged 
@@ -193,7 +193,7 @@ resource "aws_instance" "bastion" {
 
 #Installing ansible on bastion
   provisioner "remote-exec" {
-    
+    #getting SSH connection
     connection {
       host     = "${aws_instance.bastion.public_ip}"
       type     = "ssh"
@@ -201,6 +201,7 @@ resource "aws_instance" "bastion" {
       private_key = "${file("key.pem")}"
     }
 
+    #running remotely install commands: installing pip, ansible, exporting private key, hosts file and playbook
     inline = [
               "cd",
               "sudo apt install python -y",
@@ -215,12 +216,12 @@ resource "aws_instance" "bastion" {
               "chmod 700 key.pem",
               "echo '${file("./ansible/hosts")}' > hosts",
               "echo '${file("./ansible/playbook.yml")}' > playbook.yml",
+              #configuring ansible not to ask for approval of unknown certificate
               "sudo mkdir /etc/ansible",
               "sudo wget -O /etc/ansible/ansible.cfg https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg",
               "sudo sed -i 's/#host_key_checking = False/host_key_checking = False/g' /etc/ansible/ansible.cfg",
+              #running imported playbook
               "sudo ansible-playbook -i hosts -u ubuntu playbook.yml"
               ]
   }
 }
-
-#providing identity key to manage infrastucture

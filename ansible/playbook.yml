@@ -15,6 +15,7 @@
       state: present
       filename: docker
 
+#docker dependencies
   - name: "APT - install misc packages"
     apt:
       name: "{{ item }}"
@@ -30,3 +31,12 @@
     apt:
       name: "docker-ce"
       update_cache: yes
+
+  # sudo apt-get install docker-compose
+  - name: Install docker-compose
+    apt:
+      name: docker-compose
+      state: present
+      update_cache: yes
+    tags:
+      - docker
