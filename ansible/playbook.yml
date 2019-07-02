@@ -40,3 +40,8 @@
       update_cache: yes
     tags:
       - docker
+  - name: add user docker to admin group
+    user:
+      name: docker
+      append: yes
+      groups: ubuntu
