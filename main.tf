@@ -197,7 +197,7 @@ resource "aws_instance" "devtools" {
   instance_type      = "t2.micro"
   key_name           = "${var.key_pair}"
   subnet_id          = "${aws_subnet.main_bridge.id}"
-  vpc_security_group_ids = ["${aws_security_group.noport.id}","${aws_security_group.noport.webserv}"]
+  vpc_security_group_ids = ["${aws_security_group.noport.id}","${aws_security_group.webserv.id}"]
   associate_public_ip_address = true
 
   tags = {
@@ -233,11 +233,11 @@ resource "aws_instance" "bastion" {
   
   #preparing inventory
   provisioner "local-exec" {
-  command = "echo '${aws_instance.devtools.private_ip} ansible_ssh_private_key_file=./key.pem' > ./ansible/hosts"
-  command = "echo '[jenkins]' >> ./ansible/hosts"
-  command = "echo ${aws_instance.ci.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts"
-  command = "echo '[artifactory]' >> ./ansible/hosts"
-  command = "echo ${aws_instance.artifactory.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts"
+  command = "echo '${aws_instance.devtools.private_ip} ansible_ssh_private_key_file=./key.pem' > ./ansible/hosts \
+  && echo '[jenkins]' >> ./ansible/hosts \
+  && echo '${aws_instance.devtools.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts \
+  && echo '[artifactory]' >> ./ansible/hosts \
+  && echo '${aws_instance.artifactory.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts"
   #comand = "echo ${aws_instance.docker.private_ip} >> hosts"
   }
 

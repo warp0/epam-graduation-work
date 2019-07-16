@@ -56,30 +56,22 @@
 
 - hosts: artifactory
   become: true
-  vars:
-    ansible_python_interpreter: "/usr/bin/env python3"
-  
+
   tasks:
   - name: run artifactory
     docker_container:
       name: artifactory
       image: docker.bintray.io/jfrog/artifactory-oss:latest
       auto_remove: yes
-      exposed_ports:
-        - 8081
       detach: yes
 
 - hosts: devtools
   become: true
-  vars:
-    ansible_python_interpreter: "/usr/bin/env python3"
-  
+ 
   tasks:
   - name: run jenkins container
     docker_container:
       name: jenkins
       image: jenkins/jenkins
       auto_remove: yes
-      exposed_ports:
-        - 8080
       detach: yes
