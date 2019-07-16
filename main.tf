@@ -233,11 +233,7 @@ resource "aws_instance" "bastion" {
   
   #preparing inventory
   provisioner "local-exec" {
-  command = "echo '${aws_instance.devtools.private_ip} ansible_ssh_private_key_file=./key.pem' > ./ansible/hosts \
-  && echo '[jenkins]' >> ./ansible/hosts \
-  && echo '${aws_instance.devtools.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts \
-  && echo '[artifactory]' >> ./ansible/hosts \
-  && echo '${aws_instance.artifactory.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts"
+  command = "echo '${aws_instance.devtools.private_ip} ansible_ssh_private_key_file=./key.pem' > ./ansible/hosts && echo '[jenkins]' >> ./ansible/hosts && echo '${aws_instance.devtools.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts && echo '[artifactory]' >> ./ansible/hosts && echo '${aws_instance.artifactory.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts"
   #comand = "echo ${aws_instance.docker.private_ip} >> hosts"
   }
 

@@ -65,7 +65,7 @@
       auto_remove: yes
       detach: yes
 
-- hosts: devtools
+- hosts: jenkins
   become: true
  
   tasks:
