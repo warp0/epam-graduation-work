@@ -103,6 +103,39 @@ resource "aws_security_group" "webserv" {
   }  
 }
 
+resource "aws_security_group" "jenksg" {
+  
+  name  = "jenksg"
+
+  vpc_id = "${aws_vpc.main.id}"
+  ingress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["${aws_vpc.main.cidr_block}"]
+  }
+  
+  ingress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    self            = true
+  }
+
+  ingress {
+    from_port       = 80
+    to_port         = 80
+    protocol        = "6"
+    cidr_blocks     = ["0.0.0.0/0"] 
+  }
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }  
+}
+
 
 #expose artifactory
 resource "aws_security_group" "artif" {
@@ -197,7 +230,7 @@ resource "aws_instance" "devtools" {
   instance_type      = "t2.micro"
   key_name           = "${var.key_pair}"
   subnet_id          = "${aws_subnet.main_bridge.id}"
-  vpc_security_group_ids = ["${aws_security_group.noport.id}","${aws_security_group.webserv.id}"]
+  vpc_security_group_ids = ["${aws_security_group.jenksg.id}"]
   associate_public_ip_address = true
 
   tags = {
@@ -210,7 +243,7 @@ resource "aws_instance" "artifactory" {
   instance_type      = "t2.micro"
   key_name           = "${var.key_pair}"
   subnet_id          = "${aws_subnet.main_bridge.id}"
-  vpc_security_group_ids = ["${aws_security_group.noport.id}", "${aws_security_group.artif.id}"]
+  vpc_security_group_ids = ["${aws_security_group.artif.id}"]
   associate_public_ip_address = true
 
   tags = {
