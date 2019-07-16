@@ -103,6 +103,42 @@ resource "aws_security_group" "webserv" {
   }  
 }
 
+
+#expose artifactory
+resource "aws_security_group" "artif" {
+  
+  name  = "artif"
+
+  vpc_id = "${aws_vpc.main.id}"
+  ingress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["${aws_vpc.main.cidr_block}"]
+  }
+  
+  ingress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    self            = true
+  }
+
+  ingress {
+    from_port       = 8081
+    to_port         = 8081
+    protocol        = "6"
+    cidr_blocks     = ["0.0.0.0/0"] 
+  }
+  egress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = "-1"
+    cidr_blocks     = ["0.0.0.0/0"]
+  }  
+}
+
+
 #expose only SSH
 resource "aws_security_group" "ssh" {
   
@@ -161,7 +197,7 @@ resource "aws_instance" "devtools" {
   instance_type      = "t2.micro"
   key_name           = "${var.key_pair}"
   subnet_id          = "${aws_subnet.main_bridge.id}"
-  vpc_security_group_ids = ["${aws_security_group.noport.id}"]
+  vpc_security_group_ids = ["${aws_security_group.noport.id}","${aws_security_group.noport.webserv}"]
   associate_public_ip_address = true
 
   tags = {
@@ -169,6 +205,18 @@ resource "aws_instance" "devtools" {
   }
 }
 
+resource "aws_instance" "artifactory" {
+  ami                = "${data.aws_ami.ubuntu.id}"
+  instance_type      = "t2.micro"
+  key_name           = "${var.key_pair}"
+  subnet_id          = "${aws_subnet.main_bridge.id}"
+  vpc_security_group_ids = ["${aws_security_group.noport.id}", "${aws_security_group.artif.id}"]
+  associate_public_ip_address = true
+
+  tags = {
+    Name = "Artifactory instance"
+  }
+}
 
 #up Bastion
 resource "aws_instance" "bastion" {
@@ -186,8 +234,10 @@ resource "aws_instance" "bastion" {
   #preparing inventory
   provisioner "local-exec" {
   command = "echo '${aws_instance.devtools.private_ip} ansible_ssh_private_key_file=./key.pem' > ./ansible/hosts"
-  #comand = "echo ${aws_instance.ci.private_ip} >> hosts"
-  #comand = "echo ${aws_instance.qa.private_ip} >> hosts"
+  command = "echo '[jenkins]' >> ./ansible/hosts"
+  command = "echo ${aws_instance.ci.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts"
+  command = "echo '[artifactory]' >> ./ansible/hosts"
+  command = "echo ${aws_instance.artifactory.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts"
   #comand = "echo ${aws_instance.docker.private_ip} >> hosts"
   }
 

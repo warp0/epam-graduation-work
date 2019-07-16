@@ -12,5 +12,5 @@ sudo rm public_header.pem
 #deploy infrastructure
 terraform init
 
-terraform apply -auto-approve
+sudo terraform apply -auto-approve
 
