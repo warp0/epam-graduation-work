@@ -49,11 +49,6 @@
       append: yes
       groups: ubuntu
 
-  - name: Restart docker service
-    service:
-      name: docker
-      state: restarted
-
 - hosts: artifactory
   become: true
   
@@ -82,7 +77,6 @@
 
   - name: Make swap file
     command: "sudo mkswap /swapfile"
-    when: swapfile.stdout.find('swap file') == -1
     tags:
       - swap.file.mkswap
 
@@ -111,6 +105,8 @@
       image: docker.bintray.io/jfrog/artifactory-oss:latest
       auto_remove: yes
       detach: yes
+      exposed_ports: 8081
+      published_ports: 8081
 
 - hosts: jenkins
   become: true
