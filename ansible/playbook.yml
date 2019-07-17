@@ -105,8 +105,7 @@
       image: docker.bintray.io/jfrog/artifactory-oss:latest
       auto_remove: yes
       detach: yes
-      exposed_ports: 8081
-      published_ports: 8081
+      published_ports: 8081:8081
 
 - hosts: jenkins
   become: true
@@ -118,3 +117,4 @@
       image: jenkins/jenkins
       auto_remove: yes
       detach: yes
+      published_ports: 8080:8080
