@@ -32,16 +32,6 @@
       name: "docker-ce"
       update_cache: yes
 
-  # sudo apt-get install docker-compose
-  - name: Install docker-compose
-    apt:
-      name: docker-compose
-      state: present
-      update_cache: yes
-    tags:
-      - docker
-  
-  
   #add docker to ubuntu user group & restart
   - name: add user docker to admin group
     user:
@@ -99,6 +89,12 @@
     tags:
       - swap.file.swapon
 
+  - name: Create folder for jenkins_home if it does not exist
+    file:
+      path: /home/ubuntu/artifactory_home
+      state: directory
+      mode: '0755'
+
   - name: run artifactory
     docker_container:
       name: artifactory
@@ -106,11 +102,18 @@
       auto_remove: yes
       detach: yes
       published_ports: 8081:8081
+      volumes: /home/ubuntu/artifactory_home:/var/opt/jfrog/artifactory
 
 - hosts: jenkins
   become: true
  
   tasks:
+  - name: Create folder for jenkins_home if it does not exist
+    file:
+      path: /home/ubuntu/jenkins_home
+      state: directory
+      mode: '0755'
+
   - name: run jenkins container
     docker_container:
       name: jenkins
@@ -118,3 +121,4 @@
       auto_remove: yes
       detach: yes
       published_ports: 8080:8080
+      volumes: /home/ubuntu/jenkins_home:/var/jenkins_home
