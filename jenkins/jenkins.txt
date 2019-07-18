@@ -1,0 +1,9 @@
+#build
+
+(cd ./spring-boot-tests/spring-boot-smoke-tests/spring-boot-smoke-test-web-ui/; mvn clean install)
+
+**/*.jar
+
+#deploy to artifactory
+
+#java -jar *.jar 

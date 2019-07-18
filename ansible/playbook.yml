@@ -101,7 +101,7 @@
     file:
       path: /home/ubuntu/artifactory_home
       state: directory
-      mode: '0755'
+      mode: '0777'
 
   - name: run artifactory
     docker_container:
@@ -120,7 +120,7 @@
     file:
       path: /home/ubuntu/jenkins_home
       state: directory
-      mode: '0755'
+      mode: '0777'
 
   - name: run jenkins container
     docker_container:
