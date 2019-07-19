@@ -47,10 +47,6 @@
       append: yes
       groups: ubuntu
 
-- hosts: artifactory
-  become: true
-  
-  tasks:
   - name: Create swap file
     command: dd if=/dev/zero of=/swapfile bs=1024 count=1500k creates="/swapfile"
     tags:
@@ -96,6 +92,11 @@
     when: ansible_swaptotal_mb < 1
     tags:
       - swap.file.swapon
+
+- hosts: artifactory
+  become: true
+
+  tasks:
 
   - name: Create folder for artifactory_home if it does not exist
     file:
