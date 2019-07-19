@@ -125,7 +125,7 @@
   - name: run jenkins container
     docker_container:
       name: jenkins
-      image: jenkins/jenkins
+      image: warp0/jenkins:1.0
       auto_remove: yes
       detach: yes
       published_ports: 8080:8080
