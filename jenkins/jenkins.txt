@@ -1,9 +1,41 @@
-#build
 
+
+
+#github
+https://github.com/warp0/spring-boot
+
+
+
+#build
 (cd ./spring-boot-tests/spring-boot-smoke-tests/spring-boot-smoke-test-web-ui/; mvn clean install)
 
+#archive
 **/*.jar
 
-#deploy to artifactory
+#deploy to artifactory; template:
+**/*.jar
 
-#java -jar *.jar 
+#wget artifact on host
+wget {artifactory.ip}/artifactory/libs-snapshot-local/org/springframework/boot/spring-boot-smoke-test-web-ui/2.2.0.BUILD-SNAPSHOT/*.jar
+
+#run java -jar *.jar in docker
+
+docker run -d --rm -v ~/webapp/:/temp/jar/ -p 8080:8080 openjdk:8 java -jar /temp/jar/spring-boot-smoke-test-web-ui-2.2.0.BUILD-20190722.093848-1.jar
+
+
+node {
+    stage('Preparation') {
+        git 'https://github.com/warp0/spring-boot.git'
+    }
+    stage('Build') {
+        sh '(cd ./spring-boot-tests/spring-boot-smoke-tests/spring-boot-smoke-test-web-ui/; mvn clean install)'
+    }
+    stage('Results') {
+        archiveArtifacts '**/*.jar'
+    }
+    stage('upload artifactory') {
+       
+    
+}
+    
+}

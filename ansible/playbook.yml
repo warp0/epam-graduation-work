@@ -48,7 +48,7 @@
       groups: ubuntu
 
   - name: Create swap file
-    command: dd if=/dev/zero of=/swapfile bs=1024 count=2000k creates="/swapfile"
+    command: dd if=/dev/zero of=/swapfile bs=1024 count=1000k creates="/swapfile"
     tags:
       - swap.file.create
 
