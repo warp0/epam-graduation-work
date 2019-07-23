@@ -1,5 +1,4 @@
 ---
-tasks:
 - name: "APT - Add Docker GPG key"
   apt_key:
     url: https://download.docker.com/linux/ubuntu/gpg
