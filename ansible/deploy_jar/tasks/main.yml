@@ -1,7 +1,7 @@
 ---
 - name:  download artifact
   get_url: 
-    url: "(http)://{{ artifactory_ip }}[:8081]/libs-snapshot-local/9/spring-boot-web-ui.jar"
+    url: 'http://{{ artifactory_ip }}:8081/libs-snapshot-local/9/spring-boot-web-ui.jar'
     dest: ~/webapp/
 
 - name: Create folder for webapp if it does not exist
