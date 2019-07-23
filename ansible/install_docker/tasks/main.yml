@@ -41,4 +41,3 @@
     name: docker
     append: yes
     groups: ubuntu
----

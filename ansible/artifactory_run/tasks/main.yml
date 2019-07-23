@@ -13,4 +13,3 @@
     detach: yes
     published_ports: 8081:8081
     volumes: /home/ubuntu/artifactory_home:/var/opt/jfrog/artifactory
----

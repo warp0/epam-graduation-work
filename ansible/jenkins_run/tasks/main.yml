@@ -13,4 +13,3 @@
     detach: yes
     published_ports: 8080:8080
     volumes: /home/ubuntu/jenkins_home:/var/jenkins_home
----
