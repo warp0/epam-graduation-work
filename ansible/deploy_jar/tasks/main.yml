@@ -1,8 +1,10 @@
 ---
 - name:  download artifact
   get_url: 
-    url: {{ artifactory_url }}
+    url: "http://{{ artifactory_ip }}:8081/artifactory/libs-snapshot-local/10/.jar" #artifactory_ip is defined in exprort_ip job
     dest: ~/webapp/
+    url_username: "admin"
+    url_password: "admin123"
 
 - name: Create folder for webapp if it does not exist
   file:

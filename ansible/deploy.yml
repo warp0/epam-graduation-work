@@ -1,3 +1,8 @@
+- hosts: artifactory
+  become: true
+  roles:
+    - role: './export_ip'
+
 - hosts: jenkins
   become: true
   roles:
