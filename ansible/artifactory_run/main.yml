@@ -1,20 +1,16 @@
 ---
-  become: true
+- name: Create folder for artifactory_home if it does not exist
+  file:
+    path: /home/ubuntu/artifactory_home
+    state: directory
+    mode: '0777'
 
-  tasks:
-
-  - name: Create folder for artifactory_home if it does not exist
-    file:
-      path: /home/ubuntu/artifactory_home
-      state: directory
-      mode: '0777'
-
-  - name: run artifactory
-    docker_container:
-      name: artifactory
-      image: docker.bintray.io/jfrog/artifactory-oss:latest
-      auto_remove: yes
-      detach: yes
-      published_ports: 8081:8081
-      volumes: /home/ubuntu/artifactory_home:/var/opt/jfrog/artifactory
+- name: run artifactory
+  docker_container:
+    name: artifactory
+    image: docker.bintray.io/jfrog/artifactory-oss:latest
+    auto_remove: yes
+    detach: yes
+    published_ports: 8081:8081
+    volumes: /home/ubuntu/artifactory_home:/var/opt/jfrog/artifactory
 ---

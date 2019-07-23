@@ -1,26 +1,23 @@
 ---
-  become: true
-  tasks:
+- name:  download artifact
+  get_url: 
+    url: "(http)://{{ hostvars[artifactory] }}[:8081]/libs-snapshot-local/{{ build_number }}/spring-boot-web-ui.jar"
+    dest: ~/webapp/
 
-  - name:  download artifact
-    get_url: 
-      url: "(http)://{{ hostvars[artifactory] }}[:8081]/libs-snapshot-local/{{ build_number }}/spring-boot-web-ui.jar"
-      dest: ~/webapp/
+- name: Create folder for artifactory_home if it does not exist
+  file:
+    path: /home/ubuntu/webapp
+    state: directory
+    mode: '0777'
 
-  - name: Create folder for artifactory_home if it does not exist
-    file:
-      path: /home/ubuntu/webapp
-      state: directory
-      mode: '0777'
-
-  - name: run app
-    docker_container:
-      name: artifactory
-      image: openjdk:8
-      auto_remove: yes
-      detach: yes
-      published_ports: 80:8080
-      volumes: /home/ubuntu/webapp/:/temp/jar/
-      entrypoint: java -jar /temp/jar/spring-boot-web-ui.jar
+- name: run app
+  docker_container:
+    name: artifactory
+    image: openjdk:8
+    auto_remove: yes
+    detach: yes
+    published_ports: 80:8080
+    volumes: /home/ubuntu/webapp/:/temp/jar/
+    entrypoint: java -jar /temp/jar/spring-boot-web-ui.jar
 
 ---      
