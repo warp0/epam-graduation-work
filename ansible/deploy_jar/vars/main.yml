@@ -1,1 +1,1 @@
-artifactory_ip: "{{ ansible_facts['ansible_default_ipv4']['address'] }}"
+artifactory_url: "http://{{ ansible_facts['ansible_default_ipv4']['address'] }}:8081/libs-snapshot-local/9/spring-boot-web-ui.jar"
