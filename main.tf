@@ -270,6 +270,12 @@ resource "aws_instance" "bastion" {
   #comand = "echo ${aws_instance.docker.private_ip} >> hosts"
   }
 
+
+  provisioner "file" {
+    source      = "./ansible"
+    destination = "/home/ubuntu/"
+  }
+
 #Installing ansible on bastion
   provisioner "remote-exec" {
     #getting SSH connection
@@ -289,18 +295,14 @@ resource "aws_instance" "bastion" {
               "sudo python get-pip.py",
               "sudo rm get-pip.py",
               "sudo pip install ansible",
-              "mkdir ansible",
               "cd ansible",
-              "echo '${file("key.pem")}' > key.pem",
               "chmod 700 key.pem",
-              "echo '${file("./ansible/hosts")}' > hosts",
-              "echo '${file("./ansible/playbook.yml")}' > playbook.yml",
               #configuring ansible not to ask for approval of unknown certificate
               "sudo mkdir /etc/ansible",
               "sudo wget -O /etc/ansible/ansible.cfg https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg",
               "sudo sed -i 's/#host_key_checking = False/host_key_checking = False/g' /etc/ansible/ansible.cfg",
               #running imported playbook
-              "sudo ansible-playbook -i hosts -u ubuntu playbook.yml"
+              "sudo ansible-playbook -i hosts -u ubuntu init.yml"
               ]
   }
 }
