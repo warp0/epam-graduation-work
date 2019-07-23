@@ -1,0 +1,1 @@
+artifactory_ip: "{{ ansible_facts['ansible_default_ipv4']['address'] }}"
