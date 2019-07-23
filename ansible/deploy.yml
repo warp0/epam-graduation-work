@@ -1,0 +1,7 @@
+- hosts: ci
+  roles:
+    - role: './deploy-jar/'
+  
+- hosts: prod
+  roles: 
+    - role: './deploy-jar/'

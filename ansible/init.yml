@@ -1,0 +1,15 @@
+- hosts: all
+  roles:
+    - role: './install_docker/'
+
+- hosts: artifactory, jenkins
+  roles:
+    - role: './create_swap/'
+
+- hosts: artifactory
+  roles:
+    - role: './artifactory_run/'
+
+- hosts: jenkins
+  roles:
+    - role: './jenkins_run/'
