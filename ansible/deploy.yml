@@ -6,4 +6,4 @@
 - hosts: jenkins
   become: true
   roles:
-    - role: './deploy-jar/'
+    - role: './deploy_jar/'

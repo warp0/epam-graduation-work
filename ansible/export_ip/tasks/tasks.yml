@@ -1,3 +1,4 @@
 ---
 - set_fact:
+    cacheable: yes
     artifactory_ip: "{{ ansible_facts['default_ipv4']['address'] }}"
