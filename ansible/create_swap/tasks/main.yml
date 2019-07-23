@@ -44,4 +44,3 @@
   when: ansible_swaptotal_mb < 1
   tags:
     - swap.file.swapon
----

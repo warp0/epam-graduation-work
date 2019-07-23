@@ -1,7 +1,9 @@
 - hosts: ci
+  become: true
   roles:
     - role: './deploy-jar/'
   
 - hosts: prod
+  become: true
   roles: 
     - role: './deploy-jar/'

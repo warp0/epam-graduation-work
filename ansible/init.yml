@@ -1,15 +1,19 @@
 - hosts: all
+  become: true
   roles:
     - role: './install_docker/'
 
 - hosts: artifactory, jenkins
+  become: true
   roles:
     - role: './create_swap/'
 
 - hosts: artifactory
+  become: true
   roles:
     - role: './artifactory_run/'
 
 - hosts: jenkins
+  become: true
   roles:
     - role: './jenkins_run/'
