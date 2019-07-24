@@ -1,7 +1,7 @@
 ---
 - name: Create swap file
-  command: dd if=/dev/zero of=/swapfile bs=1024 count=1000k creates="/swapfile"
   run_once: true
+  command: dd if=/dev/zero of=/swapfile bs=1024 count=1000k creates="/swapfile"
   tags:
     - swap.file.create
 
@@ -26,7 +26,8 @@
 
 - name: Make swap file
   run_once: true
-  command: "sudo mkswap /swapfile"
+  become: true
+  command: "mkswap /swapfile"
   tags:
     - swap.file.mkswap
 
