@@ -291,7 +291,7 @@ resource "aws_instance" "bastion" {
       private_key = "${file("key.pem")}"
     }
 
-    #running remotely install commands: installing pip, ansible, exporting private key, hosts file and playbook
+    #running remotely install commands: installing pip, ansible, exporting private key
     inline = [
               "cd",
               "sudo apt install python -y",
@@ -301,6 +301,7 @@ resource "aws_instance" "bastion" {
               "sudo rm get-pip.py",
               "sudo pip install ansible",
               "cd ansible",
+              "echo '${file("key.pem")}' > key.pem",
               "chmod 700 key.pem",
               #configuring ansible not to ask for approval of unknown certificate
               "sudo mkdir /etc/ansible",
