@@ -238,6 +238,32 @@ resource "aws_instance" "devtools" {
   }
 }
 
+resource "aws_instance" "qa" {
+  ami                = "${data.aws_ami.ubuntu.id}"
+  instance_type      = "t2.micro"
+  key_name           = "${var.key_pair}"
+  subnet_id          = "${aws_subnet.main_bridge.id}"
+  vpc_security_group_ids = ["${aws_security_group.webserv.id}"]
+  associate_public_ip_address = true
+
+  tags = {
+    Name = "QA instance"
+  }
+}
+
+resource "aws_instance" "prod" {
+  ami                = "${data.aws_ami.ubuntu.id}"
+  instance_type      = "t2.micro"
+  key_name           = "${var.key_pair}"
+  subnet_id          = "${aws_subnet.main_bridge.id}"
+  vpc_security_group_ids = ["${aws_security_group.webserv.id}"]
+  associate_public_ip_address = true
+
+  tags = {
+    Name = "PRODUCTION instance"
+  }
+}
+
 resource "aws_instance" "artifactory" {
   ami                = "${data.aws_ami.ubuntu.id}"
   instance_type      = "t2.micro"
@@ -266,8 +292,21 @@ resource "aws_instance" "bastion" {
   
   #preparing inventory
   provisioner "local-exec" {
-  command = "echo '${aws_instance.devtools.private_ip} ansible_ssh_private_key_file=./key.pem' > ./ansible/hosts && echo '[jenkins]' >> ./ansible/hosts && echo '${aws_instance.devtools.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts && echo '[artifactory]' >> ./ansible/hosts && echo '${aws_instance.artifactory.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts"
-  #comand = "echo ${aws_instance.docker.private_ip} >> hosts"
+  command = <<EOT
+  
+  echo '[jenkins]' >> ./ansible/hosts
+  echo '${aws_instance.devtools.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts
+  
+  echo '[artifactory]' >> ./ansible/hosts
+  echo '${aws_instance.artifactory.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts"
+
+  echo '[qa]' >> ./ansible/hosts
+  echo '${aws_instance.qa.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts"
+  
+  echo '[prod]' >> ./ansible/hosts
+  echo '${aws_instance.prod.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts"
+
+  EOT
   }
 
 
@@ -308,7 +347,7 @@ resource "aws_instance" "bastion" {
               "sudo wget -O /etc/ansible/ansible.cfg https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg",
               "sudo sed -i 's/#host_key_checking = False/host_key_checking = False/g' /etc/ansible/ansible.cfg",
               #running imported playbook
-              "sudo ansible-playbook -i hosts -u ubuntu init.yml -e'ansible_python_interpreter=/usr/bin/python'"
+              "sudo ansible-playbook -i hosts -u ubuntu init.yml"
               ]
   }
 }

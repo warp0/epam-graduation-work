@@ -1,16 +1,18 @@
 ---
+- name: Create folder for webapp if it does not exist
+  file:
+    path: /home/ubuntu/webapp/
+    state: directory
+    mode: '0777'
+
+
 - name:  download artifact
-  get_url: 
-    url: "http://{{ artifactory_ip }}:8081/artifactory/libs-snapshot-local/10/.jar" #artifactory_ip is defined in exprort_ip job
-    dest: ~/webapp/
+  get_url:
+    url: "http://{{ artifactory_ip }}:8081/artifactory/libs-snapshot-local/{{ build_number }}/spring-boot-web-ui.jar" #artifactory_ip is defined in exprort_ip job
+    dest: /home/ubuntu/webapp/
     url_username: "admin"
     url_password: "admin123"
 
-- name: Create folder for webapp if it does not exist
-  file:
-    path: /home/ubuntu/webapp
-    state: directory
-    mode: '0777'
 
 - name: run app
   docker_container:
@@ -20,4 +22,4 @@
     detach: yes
     published_ports: 80:8080
     volumes: /home/ubuntu/webapp/:/temp/jar/
-    entrypoint: java -jar /temp/jar/spring-boot-web-ui.jar  
+    entrypoint: java -jar /temp/jar/spring-boot-web-ui.jar

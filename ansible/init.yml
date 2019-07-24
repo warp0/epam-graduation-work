@@ -9,6 +9,8 @@
     - role: './create_swap/'
 
 - hosts: artifactory
+  vars:
+    ansible_python_interpreter: "/usr/bin/python"
   become: true
   roles:
     - role: './artifactory_run/'

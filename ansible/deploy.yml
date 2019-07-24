@@ -1,9 +1,10 @@
-- hosts: artifactory
+- hosts: qa
   become: true
   roles:
-    - role: './export_ip/'
+    - role: './deploy_jar/'
 
-- hosts: jenkins
+- hosts: prod
   become: true
+  when: ({{ deploy }} == "true")
   roles:
     - role: './deploy_jar/'

@@ -1,7 +1,0 @@
----
-- name: set artifactory_ip variable
-  set_fact:
-    cacheable: yes
-    artifactory_ip: "{{ ansible_facts['default_ipv4']['address'] }}"
-  debug:
-    var: artifactory_ip
