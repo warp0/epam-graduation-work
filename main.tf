@@ -294,17 +294,17 @@ resource "aws_instance" "bastion" {
   provisioner "local-exec" {
   command = <<EOT
   
-  echo '[jenkins]' >> ./ansible/hosts
+  echo '[jenkins]' > ./ansible/hosts
   echo '${aws_instance.devtools.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts
   
   echo '[artifactory]' >> ./ansible/hosts
-  echo '${aws_instance.artifactory.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts"
+  echo '${aws_instance.artifactory.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts
 
   echo '[qa]' >> ./ansible/hosts
-  echo '${aws_instance.qa.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts"
-  
+  echo '${aws_instance.qa.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts
+
   echo '[prod]' >> ./ansible/hosts
-  echo '${aws_instance.prod.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts"
+  echo '${aws_instance.prod.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts
 
   EOT
   }
