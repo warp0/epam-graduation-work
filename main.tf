@@ -277,10 +277,10 @@ resource "aws_instance" "bastion" {
         type     = "ssh"
         user     = "ubuntu"
         private_key = "${file("key.pem")}"  
+    }
     source      = "./ansible"
     destination = "/home/ubuntu/"
-  }
-
+    }
 #Installing ansible on bastion
   provisioner "remote-exec" {
     #getting SSH connection
