@@ -16,7 +16,7 @@
 
 - name: run app
   docker_container:
-    name: artifactory
+    name: application
     image: openjdk:8
     auto_remove: yes
     detach: yes

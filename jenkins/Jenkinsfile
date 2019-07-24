@@ -14,7 +14,7 @@ node {
         def uploadSpec = """{
   "files": [
     {
-      "pattern": "/spring-boot-tests/spring-boot-smoke-tests/spring-boot-smoke-test-web-ui/target/*.jar",
+      "pattern": "**/*.jar",
       "target": "libs-snapshot-local/$env.BUILD_NUMBER/spring-boot-web-ui.jar"
     }
  ]
