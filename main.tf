@@ -272,6 +272,11 @@ resource "aws_instance" "bastion" {
 
 
   provisioner "file" {
+    connection {
+        host     = "${aws_instance.bastion.public_ip}"
+        type     = "ssh"
+        user     = "ubuntu"
+        private_key = "${file("key.pem")}"  
     source      = "./ansible"
     destination = "/home/ubuntu/"
   }
