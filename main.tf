@@ -308,7 +308,7 @@ resource "aws_instance" "bastion" {
               "sudo wget -O /etc/ansible/ansible.cfg https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg",
               "sudo sed -i 's/#host_key_checking = False/host_key_checking = False/g' /etc/ansible/ansible.cfg",
               #running imported playbook
-              "sudo ansible-playbook -i hosts -u ubuntu init.yml"
+              "sudo ansible-playbook -i hosts -u ubuntu init.yml -e'ansible_python_interpreter=/usr/bin/python'"
               ]
   }
 }
