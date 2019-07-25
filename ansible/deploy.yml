@@ -1,10 +1,9 @@
 - hosts: qa
   become: true
   roles:
-    - role: './deploy_jar/'
+    - role: './deploy_jar_qa/'
 
 - hosts: prod
   become: true
-  when: ({{ deploy }} == "true")
   roles:
-    - role: './deploy_jar/'
+    - role: './deploy_jar_prod/'

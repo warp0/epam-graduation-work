@@ -1,22 +1,25 @@
 ---
-- name: Create folder for webapp if it does not exist
+- name: remove old service
+  when: deploy=true 
+  docker_container:
+    name: spring-boot
+    state: absent
+
   file:
-    path: /home/ubuntu/webapp/
-    state: directory
-    mode: '0777'
+    src: /home/ubuntu/webapp/spring-boot-web-ui.jar
+    state: absent
 
 
-- name:  download artifact
+- name: artifact download, service run
+  when: deploy=true
   get_url:
     url: "http://{{ artifactory_ip }}:8081/artifactory/libs-snapshot-local/{{ build_number }}/spring-boot-web-ui.jar" #artifactory_ip is defined in exprort_ip job
     dest: /home/ubuntu/webapp/
     url_username: "admin"
     url_password: "admin123"
 
-
-- name: run app
   docker_container:
-    name: application
+    name: spring-boot
     image: openjdk:8
     auto_remove: yes
     detach: yes
