@@ -1,12 +1,14 @@
 ---
 - name: remove old service
   when: deploy=true 
+  ignore_errors: yes
   docker_container:
     name: spring-boot
     state: absent
 
 - name: remove app
   when: deploy=true 
+  ignore_errors: yes
   file:
     src: /home/ubuntu/webapp/spring-boot-web-ui.jar
     state: absent
