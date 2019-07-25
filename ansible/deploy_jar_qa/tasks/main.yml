@@ -24,6 +24,8 @@
     dest: /home/ubuntu/webapp/
     url_username: "admin"
     url_password: "admin123"
+    mode: '0777'
+
 
 - name: deploy container
   docker_container:
