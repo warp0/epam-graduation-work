@@ -25,4 +25,4 @@
     detach: yes
     published_ports: 80:8080
     volumes: /home/ubuntu/webapp/:/temp/jar/
-    entrypoint: java -jar /temp/jar/spring-boot-web-ui.jar
+    command: java -jar /temp/jar/spring-boot-web-ui.jar
