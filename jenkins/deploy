@@ -1,3 +1,5 @@
     stage('Preparation') {
-        sh "ansible-playbook -i hosts -u ubuntu -e '{"artifactory_ip":"$Artifactory.server.url'artifactory1'","build_number":"$env.BUILD_NUMBER"}'"
+        sh "ansible-playbook -i hosts -u ubuntu -e 'artifactory_ip=$Artifactory.server.url'artifactory1' build_number=$env.BUILD_NUMBER'
     }
+
+ansible-playbook -i hosts -u ubuntu -e 'artifactory_ip=10.0.0.118 build_number=1 deploy=true'
