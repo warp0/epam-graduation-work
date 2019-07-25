@@ -5,6 +5,8 @@
     name: spring-boot
     state: absent
 
+- name: remove app
+  when: deploy=true 
   file:
     src: /home/ubuntu/webapp/spring-boot-web-ui.jar
     state: absent
@@ -18,6 +20,8 @@
     url_username: "admin"
     url_password: "admin123"
 
+- name: deploy container
+  when: deploy=true 
   docker_container:
     name: spring-boot
     image: openjdk:8

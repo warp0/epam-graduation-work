@@ -1,23 +1,23 @@
 ---
 - name: remove old service
-   
   docker_container:
     name: spring-boot
     state: absent
 
+- name: remove app
   file:
     src: /home/ubuntu/webapp/spring-boot-web-ui.jar
     state: absent
 
 
 - name: artifact download, service run
-
   get_url:
     url: "http://{{ artifactory_ip }}:8081/artifactory/libs-snapshot-local/{{ build_number }}/spring-boot-web-ui.jar" #artifactory_ip is defined in exprort_ip job
     dest: /home/ubuntu/webapp/
     url_username: "admin"
     url_password: "admin123"
 
+- name: deploy container
   docker_container:
     name: spring-boot
     image: openjdk:8
