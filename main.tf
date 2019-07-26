@@ -5,7 +5,7 @@ provider "aws" {
 # Starting VPC
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
-  enable_dns_hostnames = "yes"
+  enable_dns_hostnames = true
 } 
 resource "aws_key_pair" "deployer" {
   key_name   = "${var.key_pair}"
@@ -306,6 +306,8 @@ resource "aws_instance" "bastion" {
   echo '[prod]' >> ./ansible/hosts
   echo '${aws_instance.prod.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts
 
+  echo 'jenkins_dns: "${aws_instance.devtools.public_dns}"' > ./ansible/jenkins_run/vars/main.yml
+
   EOT
   }
 
@@ -347,7 +349,7 @@ resource "aws_instance" "bastion" {
               "sudo wget -O /etc/ansible/ansible.cfg https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg",
               "sudo sed -i 's/#host_key_checking = False/host_key_checking = False/g' /etc/ansible/ansible.cfg",
               #running imported playbook
-              "sudo ansible-playbook -i hosts -u ubuntu init.yml -e 'jenkins_dns=${aws_instance.DevTools.public_dns'"
+              "sudo ansible-playbook -i hosts -u ubuntu init.yml"
               ]
   }
 }
