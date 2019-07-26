@@ -6,7 +6,7 @@
     mode: '0777'
 
 - name: generate jenkins keystore for self-signed certificate 
-    docker_container:
+  docker_container:
     name: openjdk
     image: "openjdk:8"
     auto_remove: yes
