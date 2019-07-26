@@ -1,0 +1,25 @@
+node {
+    stage('Preparation') {
+        git 'https://github.com/warp0/spring-boot.git'
+    }
+    stage('Build') {
+        sh '(cd ./spring-boot-tests/spring-boot-smoke-tests/spring-boot-smoke-test-web-ui/; mvn clean install)'
+    }
+    stage('Results') {
+        archiveArtifacts '**/*.jar'
+    }
+    stage('upload to artifactory') {
+        def server = Artifactory.server'artifactory'
+        
+        def uploadSpec = """{
+  "files": [
+    {
+      "pattern": "**/target/*.jar",
+      "target": "libs-snapshot-local/$env.BUILD_NUMBER/spring-boot-web-ui.jar"
+    }
+ ]
+}"""
+        server.upload(uploadSpec)
+        
+    }
+}

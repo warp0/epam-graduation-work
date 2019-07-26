@@ -1,0 +1,53 @@
+---
+- name: Create swap file
+  ignore_errors: yes
+  command: dd if=/dev/zero of=/swapfile bs=1024 count=1000k creates="/swapfile"
+  tags:
+    - swap.file.create
+
+
+- name: Change swap file permissions
+  ignore_errors: yes
+  file: path="/swapfile"
+        owner=root
+        group=root
+        mode=0600
+  tags:
+    - swap.file.permissions
+
+
+- name: "Check swap file type"
+  ignore_errors: yes
+  command: file /swapfile
+  register: swapfile
+  tags:
+    - swap.file.mkswap
+
+
+- name: Make swap file
+  ignore_errors: yes
+  become: true
+  command: "mkswap /swapfile"
+  tags:
+    - swap.file.mkswap
+
+
+- name: Write swap entry in fstab
+  ignore_errors: yes
+  mount: name=none
+        src=/swapfile
+        fstype=swap
+        opts=sw
+        passno=0
+        dump=0
+        state=present
+  tags:
+    - swap.fstab
+
+
+- name: Mount swap
+  ignore_errors: yes
+  command: "swapon /swapfile"
+  when: ansible_swaptotal_mb < 1
+  tags:
+    - swap.file.swapon

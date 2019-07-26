@@ -1,0 +1,9 @@
+- hosts: qa
+  become: true
+  roles:
+    - role: './deploy_jar_qa/'
+
+- hosts: prod
+  become: true
+  roles:
+    - role: './deploy_jar_prod/'
