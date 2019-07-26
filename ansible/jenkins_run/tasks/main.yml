@@ -1,19 +1,20 @@
 ---
-- name: Create folder for jenkins_home if it does not exist
-  file:
-    path: /home/ubuntu/jenkins_home/keystore
-    state: directory
-    mode: '0777'
-
-- name: generate jenkins keystore for self-signed certificate 
+- name: generate jenkins keystore for self-signed certificate
   docker_container:
     name: openjdk
-    image: "openjdk:8"
-    auto_remove: yes
-    detach: yes
-    volumes: "/home/ubuntu/jenkins_home/keystore/:/keystore/"
-    working_dir: "/keystore/"
-    command: "keytool -genkey -keyalg RSA -alias selfsigned -keystore jenkins_keystore.jks -storepass {{ lookup('password', '/home/ubuntu/jenkins_home/keystore/cert_pass chars=ascii_letters,digits,hexdigits,punctuation') }} -keysize 2048"
+    image: openjdk:8
+    auto_remove: no
+    detach: no
+    volumes: /home/ubuntu/jenkins_home/keystore/:/keystore/
+    working_dir: /keystore/
+    command: keytool -genkey -keyalg RSA -alias selfsigned -keystore jenkins_keystore.jks -storepass password -keysize 2048 -dname "{{ jenkins_dns }}, OU=ID, O=IBM, L=Hursley, S=Hants, C=GB"
+
+- name: modify permissions
+  file:
+    path: /home/ubuntu/jenkins_home
+    state: directory
+    mode: '0777'
+    recurse: yes
 
 - name: run jenkins container
   docker_container:
@@ -27,4 +28,4 @@
       httpPort: "-1"
       httpsPort: "8443"
       httpsKeyStore: "/var/jenkins_home/keystore/jenkins_keystore.jks"
-      httpsKeyStorePassword: "{{ lookup('password', '/home/ubuntu/jenkins_home/keystore/cert_pass') }}"
+      httpsKeyStorePassword: "password"

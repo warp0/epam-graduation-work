@@ -1,6 +1,8 @@
 node {
     stage('Preparation') {
-        git 'https://github.com/warp0/spring-boot.git'
+        git
+          url: 'https://github.com/warp0/spring-boot.git'
+          branch: dev
     }
     stage('Build') {
         sh '(cd ./spring-boot-tests/spring-boot-smoke-tests/spring-boot-smoke-test-web-ui/; mvn clean install)'
@@ -22,4 +24,16 @@ node {
         server.upload(uploadSpec)
         
     }
+
+    stage('deploy')
+      
+      sshCommand
+        remote[:]
+          remote.name: 'deployer'
+          remote.host: ''
+          remote.user: 'ubuntu'
+          allowAnyHosts: 'true'
+          identity: 
+        command: "sudo ansible-playbook -i /home/ubuntu/ansible/hosts -u ubuntu -e 'artifactory_ip=____ build_number=1 deploy=false' /home/ubuntu/ansible/deploy.yml" 
+
 }

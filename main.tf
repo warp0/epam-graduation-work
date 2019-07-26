@@ -5,7 +5,7 @@ provider "aws" {
 # Starting VPC
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
-
+  enable_dns_hostnames = "yes"
 } 
 resource "aws_key_pair" "deployer" {
   key_name   = "${var.key_pair}"
@@ -123,8 +123,8 @@ resource "aws_security_group" "jenksg" {
   }
 
   ingress {
-    from_port       = 8080
-    to_port         = 8080
+    from_port       = 443
+    to_port         = 443
     protocol        = "6"
     cidr_blocks     = ["0.0.0.0/0"] 
   }
@@ -347,7 +347,7 @@ resource "aws_instance" "bastion" {
               "sudo wget -O /etc/ansible/ansible.cfg https://raw.githubusercontent.com/ansible/ansible/devel/examples/ansible.cfg",
               "sudo sed -i 's/#host_key_checking = False/host_key_checking = False/g' /etc/ansible/ansible.cfg",
               #running imported playbook
-              "sudo ansible-playbook -i hosts -u ubuntu init.yml"
+              "sudo ansible-playbook -i hosts -u ubuntu init.yml -e 'jenkins_dns=${aws_instance.DevTools.public_dns'"
               ]
   }
 }
