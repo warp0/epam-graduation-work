@@ -5,7 +5,7 @@ provider "aws" {
 # Starting VPC
 resource "aws_vpc" "main" {
   cidr_block = "10.0.0.0/16"
-
+  enable_dns_hostnames = true
 } 
 resource "aws_key_pair" "deployer" {
   key_name   = "${var.key_pair}"
@@ -123,8 +123,8 @@ resource "aws_security_group" "jenksg" {
   }
 
   ingress {
-    from_port       = 8080
-    to_port         = 8080
+    from_port       = 443
+    to_port         = 443
     protocol        = "6"
     cidr_blocks     = ["0.0.0.0/0"] 
   }
@@ -305,6 +305,8 @@ resource "aws_instance" "bastion" {
 
   echo '[prod]' >> ./ansible/hosts
   echo '${aws_instance.prod.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts
+
+  echo 'jenkins_dns: "${aws_instance.devtools.public_dns}"' > ./ansible/jenkins_run/vars/main.yml
 
   EOT
   }
