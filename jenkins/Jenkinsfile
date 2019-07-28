@@ -25,7 +25,7 @@ node {
         
     }
 
-    stage('deploy')
+    stage('deploy') {
       
       sshCommand
         remote[:]
@@ -35,5 +35,5 @@ node {
           allowAnyHosts: "true"
           identity: "insert private key here"
         command: "sudo ansible-playbook -i /home/ubuntu/ansible/hosts -u ubuntu -e 'build_number=$env.BUILD_NUMBER deploy=false' /home/ubuntu/ansible/deploy.yml" 
-
+    }
 }
