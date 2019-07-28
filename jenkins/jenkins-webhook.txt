@@ -1,0 +1,2 @@
+#webhook URL
+http://{$jenkins.ip}/github-webhook/
