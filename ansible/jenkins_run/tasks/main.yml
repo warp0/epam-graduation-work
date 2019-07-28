@@ -8,7 +8,7 @@
     detach: no
     volumes: /home/ubuntu/jenkins_home/keystore/:/keystore/
     working_dir: /keystore/
-    command: keytool -genkey -keyalg RSA -alias selfsigned -keystore jenkins_keystore.jks -storepass password -keysize 2048 -dname "CN={{ jenkins_dns }}, OU=ID, O=IBM, L=Hursley, S=Hants, C=GB"
+    command: keytool -genkey -keyalg RSA -keypass -alias selfsigned -keystore jenkins_keystore.jks -storepass password -keysize 2048 -dname "CN={{ jenkins_dns }}, OU=ID, O=IBM, L=Hursley, S=Hants, C=GB"
 
 - name: modify permissions
   file:
