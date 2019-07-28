@@ -27,14 +27,6 @@
     name: "docker-ce"
     update_cache: yes
 
-- name: Install docker-compose
-  apt:
-    name: docker-compose
-    state: present
-    update_cache: yes
-  tags:
-      - docker
-
 #add docker to ubuntu user group & restart
 - name: add user docker to admin group
   user:
