@@ -10,7 +10,7 @@
     working_dir: /keystore/
     command: "keytool -genkey -noprompt -alias jenkins -dname CN={{  jenkins_dns  }}, OU=jenkins, O=EPAM, L=Graduate, S=Work, C=UA -keystore jenkins_keystore.jks -storepass password -keypass password"
 
- name: modify permissions
+- name: modify permissions
   file:
     path: /home/ubuntu/jenkins_home
     state: directory
