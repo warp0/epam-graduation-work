@@ -1,15 +1,24 @@
 ---
-- name: Create folder for jenkins_home if it does not exist
+- name: generate jenkins keystore for self-signed certificate
+  run_once: true
+  docker_container:
+    name: openjdk
+    image: openjdk:8
+    auto_remove: no
+    detach: no
+    volumes: /home/ubuntu/jenkins_home:/keystore
+    working_dir: /keystore/
+    command: keytool -genkey -keyalg RSA -keysize 4096 -alias jenkins -noprompt -dname "CN={{  jenkins_dns  }}, OU=jenkins, O=EPAM, L=Graduate, S=Work, C=UA" -keystore jenkins_keystore.jks -storepass password -keypass password
+
+
+- name: modify permissions
   file:
     path: /home/ubuntu/jenkins_home
     state: directory
     mode: '0777'
+    recurse: yes
+    owner: ubuntu
+    group: ubuntu 
 
 - name: run jenkins container
-  docker_container:
-    name: jenkins
-    image: warp0/jenkins:1.0
-    auto_remove: yes
-    detach: yes
-    published_ports: 8080:8080
-    volumes: /home/ubuntu/jenkins_home:/var/jenkins_home
+  shell: "sudo docker run -d -v /home/ubuntu/jenkins_home:/var/jenkins_home -p 443:8443 warp0/jenkins:1.0 --httpPort=-1 --httpsPort=8443 --httpsKeyStore=/var/jenkins_home/jenkins_keystore.j$
