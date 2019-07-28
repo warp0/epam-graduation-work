@@ -21,15 +21,4 @@
     group: ubuntu 
 
 - name: run jenkins container
-  docker_container:
-    name: jenkins
-    image: warp0/jenkins:1.0
-    auto_remove: yes
-    detach: yes
-    published_ports: 443:8443, 50000:50000
-    volumes: /home/ubuntu/jenkins_home:/var/jenkins_home
-    env:
-      httpPort: "-1"
-      httpsPort: "8443"
-      httpsKeyStore: "/var/jenkins_home/jenkins_keystore.jks"
-      httpsKeyStorePassword: "password"
+  shell: "sudo docker run -d -v /home/ubuntu/jenkins_home:/var/jenkins_home -p 443:8443 warp0/jenkins:1.0 --httpPort=-1 --httpsPort=8443 --httpsKeyStore=/var/jenkins_home/jenkins_keystore.j$
