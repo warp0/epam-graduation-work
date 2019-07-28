@@ -1,3 +1,12 @@
-    stage('deploy to prod') {
-        sh "sudo ansible-playbook -i hosts -u ubuntu -e 'build_number=$env.BUILD_NUMBER deploy=true' deploy.yml"
-    }
+    stage('deploy') {
+      
+      sshCommand
+        remote[:]
+          remote.name: "deployer"
+          remote.host: "$artifactory_ip"
+          remote.user: "ubuntu"
+          allowAnyHosts: "true"
+          identity: "insert private key here"
+        command: "sudo ansible-playbook -i /home/ubuntu/ansible/hosts -u ubuntu -e 'build_number=$env.BUILD_NUMBER deploy=false' /home/ubuntu/ansible/deploy.yml"
+        
+        }
