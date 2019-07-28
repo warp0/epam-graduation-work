@@ -299,6 +299,8 @@ resource "aws_instance" "bastion" {
   
   echo '[artifactory]' >> ./ansible/hosts
   echo '${aws_instance.artifactory.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts
+  echo 'artifactory_ip = "${aws_instance.artifactory.private_ip}"' > ./ansible/deploy_jar_prod/vars/main.yml
+  echo 'artifactory_ip = "${aws_instance.artifactory.private_ip}"' > ./ansible/deploy_jar_qa/vars/main.yml
 
   echo '[qa]' >> ./ansible/hosts
   echo '${aws_instance.qa.private_ip} ansible_ssh_private_key_file=./key.pem' >> ./ansible/hosts
