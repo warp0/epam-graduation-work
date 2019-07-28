@@ -6,9 +6,9 @@
     image: openjdk:8
     auto_remove: no
     detach: no
-    volumes: /home/ubuntu/jenkins_home/keystore/:/keystore/
+    volumes: /home/ubuntu/jenkins_home:/keystore
     working_dir: /keystore/
-    command: keytool -genkey -keyalg RSA -keypass -alias selfsigned -keystore jenkins_keystore.jks -storepass password -keysize 2048 -dname "CN={{ jenkins_dns }}, OU=ID, O=IBM, L=Hursley, S=Hants, C=GB"
+    command: "keytool -genkey -noprompt -alias jenkins -dname "CN={{  jenkins_dns  }}, OU=jenkins, O=EPAM, L=Graduate, S=Work, C=UA" -keystore jenkins_keystore.jks -storepass password -keypass password"
 
 - name: modify permissions
   file:
@@ -23,10 +23,10 @@
     image: warp0/jenkins:1.0
     auto_remove: yes
     detach: yes
-    published_ports: 443:8443
+    published_ports: 443:443
     volumes: /home/ubuntu/jenkins_home:/var/jenkins_home
     env:
       httpPort: "-1"
-      httpsPort: "8443"
-      httpsKeyStore: "/var/jenkins_home/keystore/jenkins_keystore.jks"
+      httpsPort: "443"
+      httpsKeyStore: "/var/jenkins_home/jenkins_keystore.jks"
       httpsKeyStorePassword: "password"
