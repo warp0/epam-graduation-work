@@ -77,4 +77,4 @@ ENTRYPOINT ["/sbin/tini", "--", "/usr/local/bin/jenkins.sh"]
 COPY plugins.sh /usr/local/bin/plugins.sh
 COPY install-plugins.sh /usr/local/bin/install-plugins.sh
 
-RUN install-plugins.sh credentials git workflow-aggregator artifactory ansible ssh-credentials
+RUN install-plugins.sh credentials git workflow-aggregator artifactory ssh-credentials ssh-steps
