@@ -1,5 +1,6 @@
 ---
 - name: generate jenkins keystore for self-signed certificate
+  run_once: true
   docker_container:
     name: openjdk
     image: openjdk:8
