@@ -18,6 +18,7 @@
     mode: '0777'
     recurse: yes
     owner: ubuntu
+    group: ubuntu 
 
 - name: run jenkins container
   docker_container:
@@ -25,10 +26,10 @@
     image: warp0/jenkins:1.0
     auto_remove: yes
     detach: yes
-    published_ports: 443:443, 50000:50000
+    published_ports: 443:8443, 50000:50000
     volumes: /home/ubuntu/jenkins_home:/var/jenkins_home
     env:
       httpPort: "-1"
-      httpsPort: "443"
+      httpsPort: "8443"
       httpsKeyStore: "/var/jenkins_home/jenkins_keystore.jks"
       httpsKeyStorePassword: "password"
