@@ -34,6 +34,6 @@ node {
           remote.user: "ubuntu"
           allowAnyHosts: "true"
           identity: "insert private key here"
-        command: "sudo ansible-playbook -i /home/ubuntu/ansible/hosts -u ubuntu -e 'artifactory_ip=____ build_number=$env.BUILD_NUMBER deploy=false' /home/ubuntu/ansible/deploy.yml" 
+        command: "sudo ansible-playbook -i /home/ubuntu/ansible/hosts -u ubuntu -e 'build_number=$env.BUILD_NUMBER deploy=false' /home/ubuntu/ansible/deploy.yml" 
 
 }
