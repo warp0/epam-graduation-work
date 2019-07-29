@@ -1,4 +1,6 @@
-  stage('deploy') {  
+node {
+
+stage('deploy') {  
         def remote = [:]
         remote.name = "bastion"
         remote.host = "!!!BASTION IP!!!"
