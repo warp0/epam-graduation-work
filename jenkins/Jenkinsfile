@@ -1,8 +1,6 @@
 node {
     stage('Preparation') {
-        git
-          url: 'https://github.com/warp0/spring-boot.git'
-          branch: dev
+        git 'https://github.com/warp0/spring-boot.git'
     }
     stage('Build') {
         sh '(cd ./spring-boot-tests/spring-boot-smoke-tests/spring-boot-smoke-test-web-ui/; mvn clean install)'
@@ -12,7 +10,6 @@ node {
     }
     stage('upload to artifactory') {
         def server = Artifactory.server'artifactory'
-        def artifactory_ip = Artifactory.server.url'artifactory'
         def uploadSpec = """{
   "files": [
     {
@@ -25,15 +22,21 @@ node {
         
     }
 
-    stage('deploy') {
-      
-      sshCommand
-        remote[:]
-          remote.name: "deployer"
-          remote.host: "$artifactory_ip"
-          remote.user: "ubuntu"
-          allowAnyHosts: "true"
-          identity: "insert private key here"
-        command: "sudo ansible-playbook -i /home/ubuntu/ansible/hosts -u ubuntu -e 'build_number=$env.BUILD_NUMBER deploy=false' /home/ubuntu/ansible/deploy.yml" 
+    
+
+    
+    stage('deploy') {  
+        def remote = [:]
+        remote.name = "bastion"
+        remote.host = "!!!BASTION IP!!!"
+        remote.user = "ubuntu"
+        remote.allowAnyHosts = true
+        remote.identity = """{
+-----BEGIN RSA PRIVATE KEY-----
+key here
+-----END RSA PRIVATE KEY-----
+}"""
+
+      sshCommand remote: remote, command: "cd ansible && sudo ansible-playbook -i hosts -u ubuntu -e 'build_number=$env.BUILD_NUMBER deploy=false' deploy.yml"
     }
 }
